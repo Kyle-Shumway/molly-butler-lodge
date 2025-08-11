@@ -212,6 +212,83 @@ section {
     margin-bottom: 1rem;
 }
 
+/* Menu Section */
+.menu-section {
+    margin: 3rem 0;
+}
+
+.menu-section h3 {
+    text-align: center;
+    color: #8B4513;
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+}
+
+.menu-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.menu-link {
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.3s ease;
+}
+
+.menu-link:hover {
+    transform: translateY(-5px);
+}
+
+.menu-item {
+    background: #F4E4BC;
+    padding: 2rem;
+    border-radius: 10px;
+    text-align: center;
+    border: 2px solid transparent;
+    transition: border-color 0.3s ease;
+}
+
+.menu-item:hover {
+    border-color: #D2691E;
+}
+
+.menu-item h4 {
+    color: #8B4513;
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+}
+
+.menu-item p {
+    color: #666;
+    margin: 0;
+}
+
+.dining-notice {
+    background: #FFF3CD;
+    border: 1px solid #D2691E;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 2rem 0;
+    text-align: center;
+}
+
+.dining-notice p {
+    margin: 0;
+    color: #8B4513;
+}
+
+.hours a {
+    color: #D2691E;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.hours a:hover {
+    text-decoration: underline;
+}
+
 /* Contact Section */
 .contact {
     background: #f8f8f8;
