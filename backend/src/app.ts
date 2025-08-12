@@ -34,10 +34,10 @@ app.use(helmet({
   crossOriginEmbedderPolicy: false, // Disable for better compatibility
 }));
 // CORS configuration - production ready
-const allowedOrigins = process.env.NODE_ENV === 'production' 
+const allowedOrigins: string[] = process.env.NODE_ENV === 'production' 
   ? [
-      process.env.FRONTEND_URL, // Production frontend URL
-    ].filter(Boolean) // Remove undefined values
+      process.env.FRONTEND_URL || '', // Production frontend URL
+    ].filter(url => url.length > 0) // Remove empty values
   : [
       'http://localhost:3000',
       'http://127.0.0.1:3000',
@@ -55,8 +55,8 @@ app.use(cors({
 
 // Rate limiting - protection against DoS attacks
 const limiter = rateLimit({
-  windowMs: (parseInt(process.env.RATE_LIMIT_WINDOW) || 15) * 60 * 1000, // 15 minutes default
-  max: parseInt(process.env.RATE_LIMIT_MAX) || 100, // limit each IP to 100 requests per windowMs
+  windowMs: (parseInt(process.env.RATE_LIMIT_WINDOW || '15') || 15) * 60 * 1000, // 15 minutes default
+  max: parseInt(process.env.RATE_LIMIT_MAX || '100') || 100, // limit each IP to 100 requests per windowMs
   message: 'Too many requests from this IP, please try again later.',
   standardHeaders: true, // Return rate limit info in headers
   legacyHeaders: false, // Disable the X-RateLimit-* headers
