@@ -10,7 +10,14 @@ const Header: React.FC = () => {
     setIsMenuOpen(false);
     
     if (sectionId === 'home') {
-      navigate('/');
+      const isHomePage = window.location.pathname === '/molly-butler-lodge/' || window.location.pathname === '/molly-butler-lodge';
+      if (isHomePage) {
+        // Already on home page, just scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        // Navigate to home page
+        navigate('/');
+      }
       return;
     }
 
