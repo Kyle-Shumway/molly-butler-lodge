@@ -1,0 +1,104 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  username  String   @unique @db.VarChar(30)
+  email     String   @unique
+  password  String
+  role      Role     @default(STAFF)
+  firstName String
+  lastName  String
+  isActive  Boolean  @default(true)
+  lastLogin DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Room {
+  id          String     @id @default(cuid())
+  name        String
+  type        RoomType
+  description String
+  capacity    Int
+  basePrice   Decimal    @db.Decimal(10, 2)
+  amenities   String[]
+  images      String[]
+  isActive    Boolean    @default(true)
+  roomNumber  String     @unique
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  
+  reservations Reservation[]
+
+  @@index([type, isActive])
+  @@index([capacity])
+  @@map("rooms")
+}
+
+model Reservation {
+  id                 String            @id @default(cuid())
+  guestFirstName     String
+  guestLastName      String
+  guestEmail         String
+  guestPhone         String
+  guestStreet        String?
+  guestCity          String?
+  guestState         String?
+  guestZipCode       String?
+  roomId             String
+  checkIn            DateTime
+  checkOut           DateTime
+  guests             Int
+  totalAmount        Decimal           @db.Decimal(10, 2)
+  status             ReservationStatus @default(PENDING)
+  paymentStatus      PaymentStatus     @default(PENDING)
+  specialRequests    String?
+  confirmationNumber String            @unique
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+
+  room Room @relation(fields: [roomId], references: [id])
+
+  @@index([checkIn, checkOut])
+  @@index([guestEmail])
+  @@index([status])
+  @@index([roomId, checkIn, checkOut])
+  @@map("reservations")
+}
+
+enum Role {
+  ADMIN
+  STAFF
+}
+
+enum RoomType {
+  HISTORIC         @map("historic")
+  MOUNTAIN_VIEW    @map("mountain-view")
+  FAMILY_CABIN     @map("family-cabin")
+}
+
+enum ReservationStatus {
+  PENDING   @map("pending")
+  CONFIRMED @map("confirmed")
+  CANCELLED @map("cancelled")
+  COMPLETED @map("completed")
+  NO_SHOW   @map("no-show")
+}
+
+enum PaymentStatus {
+  PENDING  @map("pending")
+  PAID     @map("paid")
+  REFUNDED @map("refunded")
+}

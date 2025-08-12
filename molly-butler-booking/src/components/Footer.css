@@ -1,0 +1,15 @@
+.footer {
+  background: var(--lodge-brown);
+  color: white;
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.footer p {
+  margin-bottom: 0.5rem;
+}
+
+.footer p:last-child {
+  color: var(--lodge-tan);
+  margin-bottom: 0;
+}

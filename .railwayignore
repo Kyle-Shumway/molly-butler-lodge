@@ -1,0 +1,58 @@
+# Frontend directory (not needed for backend deployment)
+molly-butler-booking/
+
+# Documentation files
+SECURITY.md
+project-summary.txt
+README.md
+deployment-notes.txt
+
+# Development files
+.claude/
+.vscode/
+.idea/
+
+# Test files
+**/*.test.*
+**/*.spec.*
+__tests__/
+tests/
+
+# Documentation
+docs/
+*.md
+
+# Environment files (use Railway environment variables instead)
+.env*
+!.env.example
+
+# Git files
+.git/
+.gitignore
+
+# Logs
+logs/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+tmp/
+temp/
+.tmp/
+
+# Legacy files from old website
+*.html
+*.css
+*.js
+*.jpg
+*.png
+*.jpeg
+*.gif
+*.ico
+
+# Local development files
+local.json
+config.local.js

@@ -1,0 +1,444 @@
+.home {
+  padding-top: 100px; /* Account for fixed header */
+}
+
+/* Hero Section */
+.hero {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5));
+  background-size: cover;
+  background-position: center;
+}
+
+.hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.hero-content h2 {
+  font-size: 3.5rem;
+  margin-bottom: 1.5rem;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.hero-content > p {
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+.weather-widget {
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 2rem auto;
+  max-width: 300px;
+}
+
+.weather-location {
+  color: var(--lodge-tan);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.weather-temp {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.weather-condition {
+  color: var(--lodge-tan);
+}
+
+.hero .btn-primary {
+  margin-top: 2rem;
+  padding: 16px 32px;
+  font-size: 1.2rem;
+}
+
+/* Section Styles */
+.section {
+  padding: 4rem 0;
+}
+
+.section-white {
+  background: white;
+}
+
+.section-gray {
+  background: #f8f8f8;
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: 3rem;
+  color: var(--lodge-brown);
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+.section-content {
+  font-size: 1.2rem;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 3rem;
+  color: #666;
+  line-height: 1.8;
+}
+
+/* Gallery Section */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.gallery-item {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gallery-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+}
+
+.gallery-item-content {
+  padding: 1.5rem;
+}
+
+.gallery-item h3 {
+  color: var(--lodge-brown);
+  margin-bottom: 0.5rem;
+  font-size: 1.3rem;
+}
+
+.gallery-item p {
+  color: #666;
+  margin: 0;
+}
+
+/* Dining Section - Clean Design */
+.dining-section {
+  background: white;
+  padding: 4rem 0;
+}
+
+.dining-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.dining-section .section-title {
+  color: var(--lodge-brown);
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+.dining-section .section-content {
+  font-size: 1.2rem;
+  max-width: 700px;
+  margin: 0 auto;
+  color: #666;
+  line-height: 1.8;
+}
+
+.dining-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.reservations-section {
+  text-align: center;
+}
+
+/* Menu Cards - Clean, professional design */
+.menu-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid #f0f0f0;
+  text-decoration: none;
+  display: block;
+}
+
+.menu-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  text-decoration: none;
+}
+
+.menu-card:focus {
+  text-decoration: none;
+  outline: none;
+}
+
+.menu-card:visited {
+  text-decoration: none;
+}
+
+.menu-card-title {
+  color: var(--lodge-brown);
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.menu-card-description {
+  color: #666;
+  margin: 0;
+  transition: color 0.3s ease;
+}
+
+.menu-card:hover .menu-card-title {
+  color: var(--lodge-orange);
+}
+
+.menu-card:hover .menu-card-description {
+  color: #555;
+}
+
+/* Menu Section Styling */
+.menu-section {
+  margin: 3rem 0;
+}
+
+.menu-section-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--lodge-brown);
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+/* Reservations Box - Consistent styling */
+.reservations-enhanced {
+  background: var(--lodge-tan);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border-left: 4px solid var(--lodge-orange);
+}
+
+.reservations-enhanced h3 {
+  color: var(--lodge-brown);
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.reservations-enhanced p {
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.reservations-enhanced a {
+  color: var(--lodge-orange);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.reservations-enhanced a:hover {
+  text-decoration: underline;
+}
+
+/* Reservations Box */
+.reservations-box {
+  background: var(--lodge-tan);
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  max-width: 400px;
+  margin: 0 auto;
+  border-left: 4px solid var(--lodge-orange);
+}
+
+.reservations-box h3 {
+  color: var(--lodge-brown);
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.reservations-box p {
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.reservations-box a {
+  color: var(--lodge-orange);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.reservations-box a:hover {
+  text-decoration: underline;
+}
+
+/* Contact Section - Clean Design */
+.contact-section {
+  background: #f8f8f8;
+  padding: 4rem 0;
+}
+
+.contact-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.contact-section .section-title {
+  color: var(--lodge-brown);
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.contact-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+}
+
+@media (max-width: 768px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+/* Contact Cards - Consistent with site design */
+.contact-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contact-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+
+.contact-card-title {
+  color: var(--lodge-brown);
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+.contact-card p {
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.contact-card a {
+  color: var(--lodge-orange);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.contact-card a:hover {
+  text-decoration: underline;
+}
+
+/* Contact Form - Consistent styling */
+.contact-form-enhanced input,
+.contact-form-enhanced textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #D1D5DB;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+  background: white;
+}
+
+.contact-form-enhanced input:focus,
+.contact-form-enhanced textarea:focus {
+  outline: none;
+  border-color: var(--lodge-orange);
+  box-shadow: 0 0 0 3px rgba(210, 105, 30, 0.1);
+}
+
+.contact-form-enhanced button {
+  background: var(--lodge-orange);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.contact-form-enhanced button:hover {
+  background: #CD853F;
+  transform: translateY(-1px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hero-content h2 {
+    font-size: 2.5rem;
+  }
+
+  .hero-content > p {
+    font-size: 1.4rem;
+  }
+
+  .contact-info {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .gallery-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .menu-links {
+    grid-template-columns: 1fr;
+  }
+
+  .section-title {
+    font-size: 2rem;
+  }
+}
