@@ -336,7 +336,7 @@ const Bookings: React.FC = () => {
             {rooms.map((room) => (
               <div key={room.id} className="room-card">
                 <img 
-                  src={room.images[0] || `${process.env.PUBLIC_URL}/Historic-Molly-Butler-Lodge-And-Restaurant-Greer-AZ.jpg`} 
+                  src={room.images[0] ? `${process.env.PUBLIC_URL}/${room.images[0]}` : `${process.env.PUBLIC_URL}/Historic-Molly-Butler-Lodge-And-Restaurant-Greer-AZ.jpg`} 
                   alt={room.name} 
                   className="room-image"
                 />

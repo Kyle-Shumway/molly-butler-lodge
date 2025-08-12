@@ -16,7 +16,7 @@ async function main() {
         capacity: 2,
         basePrice: 149.00,
         amenities: ['Private Bath', 'Historic Charm', 'WiFi', 'Heating'],
-        images: ['room-101-1.jpg', 'room-101-2.jpg'],
+        images: ['Historic-Molly-Butler-Lodge-And-Restaurant-Greer-AZ.jpg'],
         roomNumber: '101',
         isActive: true
       }
@@ -31,7 +31,7 @@ async function main() {
         capacity: 4,
         basePrice: 199.00,
         amenities: ['Mountain View', 'Private Bath', 'Sitting Area', 'WiFi', 'Mini Fridge'],
-        images: ['suite-201-1.jpg', 'suite-201-2.jpg'],
+        images: ['Molly-Butler-Lodge-Restaurant-1280x960.jpg'],
         roomNumber: '201',
         isActive: true
       }
@@ -46,7 +46,7 @@ async function main() {
         capacity: 8,
         basePrice: 249.00,
         amenities: ['Separate Bedrooms', 'Full Kitchen', 'Living Area', 'WiFi', 'Fireplace'],
-        images: ['cabin-301-1.jpg', 'cabin-301-2.jpg'],
+        images: ['Historic-Molly-Butler-Lodge-And-Restaurant-Greer-AZ.jpg'],
         roomNumber: '301',
         isActive: true
       }
