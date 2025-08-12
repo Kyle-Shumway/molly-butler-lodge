@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/molly-butler-lodge/static/css/main.c67ca609.css",
+    "main.js": "/molly-butler-lodge/static/js/main.6bb04393.js",
+    "static/js/453.830aa91a.chunk.js": "/molly-butler-lodge/static/js/453.830aa91a.chunk.js",
+    "index.html": "/molly-butler-lodge/index.html",
+    "main.c67ca609.css.map": "/molly-butler-lodge/static/css/main.c67ca609.css.map",
+    "main.6bb04393.js.map": "/molly-butler-lodge/static/js/main.6bb04393.js.map",
+    "453.830aa91a.chunk.js.map": "/molly-butler-lodge/static/js/453.830aa91a.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.c67ca609.css",
+    "static/js/main.6bb04393.js"
+  ]
+}
