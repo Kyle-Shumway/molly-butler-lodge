@@ -15,7 +15,8 @@ const Header: React.FC = () => {
     }
 
     // Navigate to home first if not already there
-    if (window.location.pathname !== '/') {
+    const isHomePage = window.location.pathname === '/molly-butler-lodge/' || window.location.pathname === '/molly-butler-lodge';
+    if (!isHomePage) {
       navigate('/');
       setTimeout(() => scrollToSection(sectionId), 100);
     } else {

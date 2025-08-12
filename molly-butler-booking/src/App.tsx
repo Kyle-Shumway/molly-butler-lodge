@@ -8,7 +8,7 @@ import Admin from './pages/Admin';
 
 function App() {
   return (
-    <Router>
+    <Router basename="/molly-butler-lodge">
       <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
         <Header />
         <main style={{ flex: 1 }}>
