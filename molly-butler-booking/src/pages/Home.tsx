@@ -11,32 +11,32 @@ const Home: React.FC = () => {
 
   const galleryImages = [
     {
-      src: '/Historic-Molly-Butler-Lodge-And-Restaurant-Greer-AZ.jpg',
+      src: process.env.PUBLIC_URL + '/Historic-Molly-Butler-Lodge-And-Restaurant-Greer-AZ.jpg',
       title: 'Historic Lodge Exterior',
       description: 'The iconic Molly Butler Lodge building, established in 1910'
     },
     {
-      src: '/Molly-Butler-Lodge-Restaurant-1280x960.jpg',
+      src: process.env.PUBLIC_URL + '/Molly-Butler-Lodge-Restaurant-1280x960.jpg',
       title: 'Cozy Restaurant Interior',
       description: 'Warm, inviting dining atmosphere for family and friends'
     },
     {
-      src: '/Historic-Molly-Butler-Lodge-And-Restaurant-Greer-AZ.jpg',
+      src: process.env.PUBLIC_URL + '/Historic-Molly-Butler-Lodge-And-Restaurant-Greer-AZ.jpg',
       title: 'Arizona\'s Oldest Guest Lodge',
       description: 'Over a century of hospitality in the White Mountains'
     },
     {
-      src: '/Molly-Butler-Lodge-Restaurant-1280x960.jpg',
+      src: process.env.PUBLIC_URL + '/Molly-Butler-Lodge-Restaurant-1280x960.jpg',
       title: 'Mountain Dining Experience',
       description: 'Authentic cuisine in a historic setting'
     },
     {
-      src: '/Historic-Molly-Butler-Lodge-And-Restaurant-Greer-AZ.jpg',
+      src: process.env.PUBLIC_URL + '/Historic-Molly-Butler-Lodge-And-Restaurant-Greer-AZ.jpg',
       title: 'Greer, Arizona Location',
       description: 'Nestled in the beautiful White Mountains'
     },
     {
-      src: '/Molly-Butler-Lodge-Restaurant-1280x960.jpg',
+      src: process.env.PUBLIC_URL + '/Molly-Butler-Lodge-Restaurant-1280x960.jpg',
       title: 'Family Gatherings',
       description: 'A perfect place for creating lasting memories'
     }
@@ -84,7 +84,7 @@ const Home: React.FC = () => {
       <section 
         className="hero"
         style={{
-          backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/Historic-Molly-Butler-Lodge-And-Restaurant-Greer-AZ.jpg')`
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${process.env.PUBLIC_URL}/Historic-Molly-Butler-Lodge-And-Restaurant-Greer-AZ.jpg')`
         }}
       >
         <div className="hero-content">
