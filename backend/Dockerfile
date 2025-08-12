@@ -4,23 +4,25 @@ FROM node:18-alpine
 # Set working directory
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
+# Copy backend package files
+COPY backend/package*.json ./
 
-# Install dependencies
-RUN npm ci --only=production
+# Install dependencies (including dev dependencies for building)
+RUN npm ci
 
-# Copy source code
-COPY . .
+# Copy backend source code
+COPY backend/ ./
 
-# Build the application
-RUN npm run build
+# Generate Prisma client and build
+RUN npx prisma generate && npm run build
+
+# Remove dev dependencies for production
+RUN npm ci --only=production && npm cache clean --force
 
 # Create non-root user
-RUN addgroup -g 1001 -S nodejs
-RUN adduser -S nodejs -u 1001
+RUN addgroup -g 1001 -S nodejs && adduser -S nodejs -u 1001
 
-# Change ownership of the app directory
+# Change ownership and switch user
 RUN chown -R nodejs:nodejs /app
 USER nodejs
 
