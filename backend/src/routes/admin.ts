@@ -2,6 +2,12 @@ import express from 'express';
 import { authenticateToken, requireStaffOrAdmin, AuthRequest } from '../middleware/auth';
 import { prisma } from '../lib/prisma';
 
+// Utility function to format reservation for frontend
+const formatReservationForFrontend = (reservation: any) => ({
+  ...reservation,
+  status: reservation.status.toLowerCase()
+});
+
 const router = express.Router();
 
 // All admin routes require authentication
@@ -69,6 +75,9 @@ router.get('/dashboard', async (req, res) => {
     // Calculate occupancy rate
     const occupancyRate = activeRooms > 0 ? ((currentGuests / activeRooms) * 100).toFixed(1) : '0';
 
+    // Transform reservation status to lowercase for frontend consistency
+    const formattedRecentReservations = recentReservations.map(formatReservationForFrontend);
+
     res.json({
       overview: {
         totalRooms,
@@ -84,7 +93,7 @@ router.get('/dashboard', async (req, res) => {
         reservations: monthlyReservations,
         revenue: Number(monthlyRevenue._sum.totalAmount) || 0
       },
-      recentReservations
+      recentReservations: formattedRecentReservations
     });
   } catch (error: any) {
     res.status(500).json({ message: 'Error fetching dashboard data', error: error.message });
@@ -125,22 +134,25 @@ router.get('/calendar/:year/:month', async (req, res) => {
     reservations.forEach((reservation: any) => {
       const checkInDate = reservation.checkIn.toISOString().split('T')[0];
       const checkOutDate = reservation.checkOut.toISOString().split('T')[0];
+      
+      // Transform reservation status to lowercase for frontend consistency
+      const formattedReservation = formatReservationForFrontend(reservation);
 
       // Add to check-ins
       if (calendarData[checkInDate]) {
-        calendarData[checkInDate].checkIns.push(reservation);
+        calendarData[checkInDate].checkIns.push(formattedReservation);
       }
 
       // Add to check-outs
       if (calendarData[checkOutDate]) {
-        calendarData[checkOutDate].checkOuts.push(reservation);
+        calendarData[checkOutDate].checkOuts.push(formattedReservation);
       }
 
       // Add to current guests for dates in between
       for (let d = new Date(reservation.checkIn); d < reservation.checkOut; d.setDate(d.getDate() + 1)) {
         const dateStr = d.toISOString().split('T')[0];
         if (calendarData[dateStr]) {
-          calendarData[dateStr].currentGuests.push(reservation);
+          calendarData[dateStr].currentGuests.push(formattedReservation);
         }
       }
     });
@@ -194,8 +206,11 @@ router.get('/reports/reservations', async (req, res) => {
       }, {})
     };
 
+    // Transform reservation status to lowercase for frontend consistency
+    const formattedReservations = reservations.map(formatReservationForFrontend);
+
     res.json({
-      reservations,
+      reservations: formattedReservations,
       summary
     });
   } catch (error: any) {

@@ -8,7 +8,9 @@ async function main() {
   const rooms = await Promise.all([
     prisma.room.upsert({
       where: { roomNumber: '101' },
-      update: {},
+      update: {
+        images: ['interior_room_bedroom.png']
+      },
       create: {
         name: 'Historic Room 101',
         type: 'HISTORIC',
@@ -16,14 +18,16 @@ async function main() {
         capacity: 2,
         basePrice: 149.00,
         amenities: ['Private Bath', 'Historic Charm', 'WiFi', 'Heating'],
-        images: ['Historic-Molly-Butler-Lodge-And-Restaurant-Greer-AZ.jpg'],
+        images: ['interior_room_bedroom.png'],
         roomNumber: '101',
         isActive: true
       }
     }),
     prisma.room.upsert({
       where: { roomNumber: '201' },
-      update: {},
+      update: {
+        images: ['interior_room_bedroom.png']
+      },
       create: {
         name: 'Mountain View Suite 201',
         type: 'MOUNTAIN_VIEW',
@@ -31,14 +35,16 @@ async function main() {
         capacity: 4,
         basePrice: 199.00,
         amenities: ['Mountain View', 'Private Bath', 'Sitting Area', 'WiFi', 'Mini Fridge'],
-        images: ['Molly-Butler-Lodge-Restaurant-1280x960.jpg'],
+        images: ['interior_room_bedroom.png'],
         roomNumber: '201',
         isActive: true
       }
     }),
     prisma.room.upsert({
       where: { roomNumber: '301' },
-      update: {},
+      update: {
+        images: ['interior_room_bedroom.png']
+      },
       create: {
         name: 'Family Cabin 301',
         type: 'FAMILY_CABIN',
@@ -46,7 +52,7 @@ async function main() {
         capacity: 8,
         basePrice: 249.00,
         amenities: ['Separate Bedrooms', 'Full Kitchen', 'Living Area', 'WiFi', 'Fireplace'],
-        images: ['Historic-Molly-Butler-Lodge-And-Restaurant-Greer-AZ.jpg'],
+        images: ['interior_room_bedroom.png'],
         roomNumber: '301',
         isActive: true
       }

@@ -212,3 +212,78 @@ export const sendReminderEmail = async (reservation: ReservationWithRoom) => {
     throw error;
   }
 };
+
+// Send reservation update email
+export const sendReservationUpdateEmail = async (reservation: ReservationWithRoom, changes: string[]) => {
+  try {
+    const transporter = createTransporter();
+    
+    const checkInDate = reservation.checkIn.toLocaleDateString();
+    const checkOutDate = reservation.checkOut.toLocaleDateString();
+    const nights = Math.ceil((reservation.checkOut.getTime() - reservation.checkIn.getTime()) / (1000 * 60 * 60 * 24));
+    
+    const mailOptions = {
+      from: process.env.FROM_EMAIL || 'noreply@mollybutterlodge.com',
+      to: reservation.guestEmail,
+      subject: `Reservation Updated - ${reservation.confirmationNumber}`,
+      html: `
+        <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <div style="text-align: center; margin-bottom: 30px;">
+            <h1 style="color: #8B4513; margin-bottom: 5px;">Molly Butler Lodge</h1>
+            <p style="color: #666; font-style: italic;">Est. 1910</p>
+          </div>
+          
+          <div style="background: #e6f3ff; padding: 20px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #007acc;">
+            <h2 style="color: #007acc; margin-top: 0;">Reservation Updated</h2>
+            <p style="font-size: 18px; margin-bottom: 10px;">
+              <strong>Confirmation Number:</strong> ${reservation.confirmationNumber}
+            </p>
+          </div>
+
+          <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #ffc107;">
+            <h3 style="color: #856404; margin-top: 0;">Changes Made to Your Reservation</h3>
+            <ul style="color: #856404; margin: 0; padding-left: 20px;">
+              ${changes.map(change => `<li>${change}</li>`).join('')}
+            </ul>
+          </div>
+
+          <h3 style="color: #8B4513;">Updated Reservation Details</h3>
+          <p><strong>Guest:</strong> ${reservation.guestFirstName} ${reservation.guestLastName}</p>
+          <p><strong>Room:</strong> ${reservation.room.name}</p>
+          <p><strong>Check-in:</strong> ${checkInDate}</p>
+          <p><strong>Check-out:</strong> ${checkOutDate}</p>
+          <p><strong>Nights:</strong> ${nights}</p>
+          <p><strong>Guests:</strong> ${reservation.guests}</p>
+          <p><strong>Status:</strong> ${reservation.status}</p>
+          <p><strong>Total Amount:</strong> $${Number(reservation.totalAmount).toFixed(2)}</p>
+
+          ${reservation.specialRequests ? `
+            <h3 style="color: #8B4513;">Special Requests</h3>
+            <p style="font-style: italic;">${reservation.specialRequests}</p>
+          ` : ''}
+
+          <div style="background: #f8f8f8; padding: 15px; border-radius: 8px; margin: 20px 0;">
+            <h3 style="color: #8B4513; margin-top: 0;">Lodge Information</h3>
+            <p><strong>Address:</strong> 109 Main Street, Greer, AZ 85927</p>
+            <p><strong>Phone:</strong> (928) 735-7226</p>
+            <p><strong>Check-in Time:</strong> 3:00 PM</p>
+            <p><strong>Check-out Time:</strong> 11:00 AM</p>
+          </div>
+
+          <div style="border-top: 2px solid #D2691E; padding-top: 20px; margin-top: 30px; text-align: center;">
+            <p style="color: #666;">
+              If you have any questions about these changes, please call us at (928) 735-7226.<br>
+              We look forward to welcoming you to Arizona's Oldest Guest Lodge!
+            </p>
+          </div>
+        </div>
+      `
+    };
+
+    await transporter.sendMail(mailOptions);
+    console.log(`Reservation update email sent to ${reservation.guestEmail}`);
+  } catch (error) {
+    console.error('Error sending reservation update email:', error);
+    throw error;
+  }
+};

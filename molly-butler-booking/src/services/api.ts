@@ -54,7 +54,6 @@ export const reservationsAPI = {
   getAll: (filters?: any) => api.get('/reservations', { params: filters }),
   getById: (id: string) => api.get(`/reservations/${id}`),
   update: (id: string, data: any) => api.put(`/reservations/${id}`, data),
-  delete: (id: string) => api.delete(`/reservations/${id}`),
   getStats: () => api.get('/reservations/admin/stats'),
 };
 

@@ -3,6 +3,14 @@ import { authAPI, reservationsAPI } from '../services/api';
 import { User, DashboardStats, Reservation } from '../types';
 import './Admin.css';
 
+// Helper function to format date for HTML date input (YYYY-MM-DD)
+const formatDateForInput = (dateValue: string | Date): string => {
+  if (!dateValue) return '';
+  const date = new Date(dateValue);
+  if (isNaN(date.getTime())) return '';
+  return date.toISOString().split('T')[0];
+};
+
 const Admin: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [credentials, setCredentials] = useState({ username: '', password: '' });
@@ -13,9 +21,8 @@ const Admin: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [editingReservation, setEditingReservation] = useState<Reservation | null>(null);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [showCancelModal, setShowCancelModal] = useState(false);
-  const [cancellingReservation, setCancellingReservation] = useState<Reservation | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   useEffect(() => {
     // Check if user is already logged in
@@ -92,11 +99,6 @@ const Admin: React.FC = () => {
     setError(null);
   };
 
-  const handleCancelReservation = (reservation: Reservation) => {
-    setCancellingReservation(reservation);
-    setShowCancelModal(true);
-    setError(null);
-  };
 
   const handleEditSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -104,6 +106,7 @@ const Admin: React.FC = () => {
 
     setSubmitting(true);
     setError(null);
+    setSuccessMessage(null);
 
     try {
       const updateData = {
@@ -122,7 +125,7 @@ const Admin: React.FC = () => {
         status: editingReservation.status
       };
 
-      await reservationsAPI.update(editingReservation.id, updateData);
+      const response = await reservationsAPI.update(editingReservation.id, updateData);
       
       // Update the reservation in the local state
       setReservations(prev => 
@@ -133,8 +136,17 @@ const Admin: React.FC = () => {
         )
       );
       
-      setShowEditModal(false);
-      setEditingReservation(null);
+      if (response.data.emailSent) {
+        setSuccessMessage('Reservation updated successfully! A summary of changes has been sent to the guest.');
+      } else {
+        setSuccessMessage('Reservation updated successfully!');
+      }
+      
+      setTimeout(() => {
+        setShowEditModal(false);
+        setEditingReservation(null);
+        setSuccessMessage(null);
+      }, 2000);
     } catch (error: any) {
       if (error.code === 'ERR_NETWORK') {
         setError('Cannot connect to server. Please make sure the backend is running.');
@@ -146,43 +158,12 @@ const Admin: React.FC = () => {
     }
   };
 
-  const handleCancelConfirm = async () => {
-    if (!cancellingReservation) return;
-
-    setSubmitting(true);
-    setError(null);
-
-    try {
-      await reservationsAPI.update(cancellingReservation.id, { status: 'cancelled' });
-      
-      // Update the reservation status in the local state
-      setReservations(prev => 
-        prev.map(res => 
-          res.id === cancellingReservation.id 
-            ? { ...res, status: 'cancelled' as const }
-            : res
-        )
-      );
-      
-      setShowCancelModal(false);
-      setCancellingReservation(null);
-    } catch (error: any) {
-      if (error.code === 'ERR_NETWORK') {
-        setError('Cannot connect to server. Please make sure the backend is running.');
-      } else {
-        setError(error.response?.data?.message || 'Failed to cancel reservation');
-      }
-    } finally {
-      setSubmitting(false);
-    }
-  };
 
   const handleModalClose = () => {
     setShowEditModal(false);
-    setShowCancelModal(false);
     setEditingReservation(null);
-    setCancellingReservation(null);
     setError(null);
+    setSuccessMessage(null);
   };
 
   if (!isLoggedIn) {
@@ -293,13 +274,6 @@ const Admin: React.FC = () => {
                         >
                           Edit
                         </button>
-                        <button 
-                          className="btn-table-action danger"
-                          onClick={() => handleCancelReservation(reservation)}
-                          disabled={reservation.status === 'cancelled'}
-                        >
-                          Cancel
-                        </button>
                       </div>
                     </td>
                   </tr>
@@ -330,6 +304,7 @@ const Admin: React.FC = () => {
             </div>
             
             {error && <div className="error-message">{error}</div>}
+            {successMessage && <div className="success-message">{successMessage}</div>}
             
             <form onSubmit={handleEditSubmit} className="edit-form">
               <div className="form-row">
@@ -383,7 +358,7 @@ const Admin: React.FC = () => {
                   <label className="form-label">Check-in</label>
                   <input
                     type="date"
-                    value={editingReservation.checkIn}
+                    value={formatDateForInput(editingReservation.checkIn)}
                     onChange={(e) => setEditingReservation(prev => prev ? { ...prev, checkIn: e.target.value } : null)}
                     className="form-input"
                   />
@@ -392,7 +367,7 @@ const Admin: React.FC = () => {
                   <label className="form-label">Check-out</label>
                   <input
                     type="date"
-                    value={editingReservation.checkOut}
+                    value={formatDateForInput(editingReservation.checkOut)}
                     onChange={(e) => setEditingReservation(prev => prev ? { ...prev, checkOut: e.target.value } : null)}
                     className="form-input"
                   />
@@ -461,53 +436,6 @@ const Admin: React.FC = () => {
         </div>
       )}
 
-      {/* Cancel Confirmation Modal */}
-      {showCancelModal && cancellingReservation && (
-        <div className="modal-overlay" onClick={handleModalClose}>
-          <div className="modal-content cancel-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h2>Cancel Reservation</h2>
-              <button 
-                className="modal-close"
-                onClick={handleModalClose}
-              >
-                ×
-              </button>
-            </div>
-            
-            {error && <div className="error-message">{error}</div>}
-            
-            <div className="cancel-confirmation">
-              <p>Are you sure you want to cancel this reservation?</p>
-              <div className="reservation-details">
-                <p><strong>Guest:</strong> {cancellingReservation.guestFirstName} {cancellingReservation.guestLastName}</p>
-                <p><strong>Room:</strong> {cancellingReservation.room?.name || `Room ${cancellingReservation.roomId}`}</p>
-                <p><strong>Dates:</strong> {new Date(cancellingReservation.checkIn).toLocaleDateString()} - {new Date(cancellingReservation.checkOut).toLocaleDateString()}</p>
-                <p><strong>Confirmation:</strong> {cancellingReservation.confirmationNumber}</p>
-              </div>
-              <p className="warning-text">This action cannot be undone.</p>
-            </div>
-
-            <div className="form-actions">
-              <button 
-                type="button" 
-                className="btn-secondary"
-                onClick={handleModalClose}
-              >
-                Keep Reservation
-              </button>
-              <button 
-                type="button" 
-                className="btn-danger"
-                onClick={handleCancelConfirm}
-                disabled={submitting}
-              >
-                {submitting ? 'Cancelling...' : 'Cancel Reservation'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

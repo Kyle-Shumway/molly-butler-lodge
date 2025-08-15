@@ -1,7 +1,13 @@
 import express from 'express';
 import { prisma } from '../lib/prisma';
 import { authenticateToken, requireStaffOrAdmin } from '../middleware/auth';
-// import { sendConfirmationEmail, sendCancellationEmail } from '../utils/emailService';
+import { sendConfirmationEmail, sendCancellationEmail, sendReservationUpdateEmail } from '../utils/emailService';
+
+// Utility function to format reservation for frontend
+const formatReservationForFrontend = (reservation: any) => ({
+  ...reservation,
+  status: reservation.status.toLowerCase()
+});
 
 const router = express.Router();
 
@@ -91,8 +97,8 @@ router.post('/', async (req, res) => {
 
     // Send confirmation email
     try {
-      // await sendConfirmationEmail(reservation);
-      console.log('Confirmation email would be sent to:', reservation.guestEmail);
+      await sendConfirmationEmail(reservation);
+      console.log('Confirmation email sent to:', reservation.guestEmail);
     } catch (emailError) {
       console.error('Failed to send confirmation email:', emailError);
       // Continue without failing the reservation
@@ -100,7 +106,7 @@ router.post('/', async (req, res) => {
 
     res.status(201).json({
       message: 'Reservation created successfully',
-      reservation,
+      reservation: formatReservationForFrontend(reservation),
       confirmationNumber: reservation.confirmationNumber
     });
   } catch (error: any) {
@@ -121,7 +127,7 @@ router.get('/confirmation/:confirmationNumber', async (req, res) => {
       return res.status(404).json({ message: 'Reservation not found' });
     }
 
-    res.json(reservation);
+    res.json(formatReservationForFrontend(reservation));
   } catch (error: any) {
     res.status(500).json({ message: 'Error fetching reservation', error: error.message });
   }
@@ -170,13 +176,16 @@ router.patch('/confirmation/:confirmationNumber', async (req, res) => {
 
     // Send cancellation email
     try {
-      // await sendCancellationEmail(updatedReservation);
-      console.log('Cancellation email would be sent to:', updatedReservation.guestEmail);
+      await sendCancellationEmail(updatedReservation);
+      console.log('Cancellation email sent to:', updatedReservation.guestEmail);
     } catch (emailError) {
       console.error('Failed to send cancellation email:', emailError);
     }
 
-    res.json({ message: 'Reservation cancelled successfully', reservation: updatedReservation });
+    res.json({ 
+      message: 'Reservation cancelled successfully', 
+      reservation: formatReservationForFrontend(updatedReservation)
+    });
   } catch (error: any) {
     res.status(500).json({ message: 'Error updating reservation', error: error.message });
   }
@@ -212,7 +221,10 @@ router.get('/', async (req, res) => {
       orderBy: { checkIn: 'desc' }
     });
 
-    res.json(reservations);
+    // Ensure status values are lowercase for frontend consistency
+    const formattedReservations = reservations.map(formatReservationForFrontend);
+
+    res.json(formattedReservations);
   } catch (error: any) {
     res.status(500).json({ message: 'Error fetching reservations', error: error.message });
   }
@@ -228,7 +240,7 @@ router.get('/:id', async (req, res) => {
     if (!reservation) {
       return res.status(404).json({ message: 'Reservation not found' });
     }
-    res.json(reservation);
+    res.json(formatReservationForFrontend(reservation));
   } catch (error: any) {
     res.status(500).json({ message: 'Error fetching reservation', error: error.message });
   }
@@ -241,32 +253,83 @@ router.put('/:id', async (req, res) => {
     const dataToUpdate: any = { ...updateData };
     
     if (status) {
-      dataToUpdate.status = status.toString().toUpperCase();
+      // Convert to uppercase for Prisma enum
+      const statusUpper = status.toString().toUpperCase();
+      dataToUpdate.status = statusUpper;
+    }
+    
+    // Get the original reservation to compare changes
+    const originalReservation = await prisma.reservation.findUnique({
+      where: { id: req.params.id },
+      include: { room: true }
+    });
+    
+    if (!originalReservation) {
+      return res.status(404).json({ message: 'Reservation not found' });
     }
 
-    const reservation = await prisma.reservation.update({
+    const updatedReservation = await prisma.reservation.update({
       where: { id: req.params.id },
       data: dataToUpdate,
       include: { room: true }
     });
+    
+    // Track changes for email notification
+    const changes: string[] = [];
+    
+    if (originalReservation.guestFirstName !== updatedReservation.guestFirstName || 
+        originalReservation.guestLastName !== updatedReservation.guestLastName) {
+      changes.push(`Guest name updated to: ${updatedReservation.guestFirstName} ${updatedReservation.guestLastName}`);
+    }
+    
+    if (originalReservation.guestEmail !== updatedReservation.guestEmail) {
+      changes.push(`Email updated to: ${updatedReservation.guestEmail}`);
+    }
+    
+    if (originalReservation.guestPhone !== updatedReservation.guestPhone) {
+      changes.push(`Phone updated to: ${updatedReservation.guestPhone}`);
+    }
+    
+    if (originalReservation.checkIn.getTime() !== updatedReservation.checkIn.getTime()) {
+      changes.push(`Check-in date changed to: ${updatedReservation.checkIn.toLocaleDateString()}`);
+    }
+    
+    if (originalReservation.checkOut.getTime() !== updatedReservation.checkOut.getTime()) {
+      changes.push(`Check-out date changed to: ${updatedReservation.checkOut.toLocaleDateString()}`);
+    }
+    
+    if (originalReservation.guests !== updatedReservation.guests) {
+      changes.push(`Number of guests changed to: ${updatedReservation.guests}`);
+    }
+    
+    if (originalReservation.status !== updatedReservation.status) {
+      changes.push(`Reservation status changed to: ${updatedReservation.status}`);
+    }
+    
+    if (originalReservation.specialRequests !== updatedReservation.specialRequests) {
+      changes.push(`Special requests updated`);
+    }
+    
+    // Send update email if there are changes
+    if (changes.length > 0) {
+      try {
+        await sendReservationUpdateEmail(updatedReservation, changes);
+      } catch (emailError) {
+        console.error('Failed to send reservation update email:', emailError);
+        // Continue even if email fails
+      }
+    }
 
-    res.json(reservation);
+    res.json({
+      ...updatedReservation,
+      status: updatedReservation.status.toLowerCase(),
+      emailSent: changes.length > 0
+    });
   } catch (error: any) {
     res.status(400).json({ message: 'Error updating reservation', error: error.message });
   }
 });
 
-// Delete reservation (admin)
-router.delete('/:id', async (req, res) => {
-  try {
-    const reservation = await prisma.reservation.delete({
-      where: { id: req.params.id }
-    });
-    res.json({ message: 'Reservation deleted successfully' });
-  } catch (error: any) {
-    res.status(500).json({ message: 'Error deleting reservation', error: error.message });
-  }
-});
 
 // Get dashboard statistics
 router.get('/admin/stats', async (req, res) => {
