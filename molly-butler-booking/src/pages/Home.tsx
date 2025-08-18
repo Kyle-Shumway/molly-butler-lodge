@@ -16,22 +16,22 @@ const Home: React.FC = () => {
       description: 'The iconic Molly Butler Lodge building, established in 1910'
     },
     {
-      src: process.env.PUBLIC_URL + '/Molly-Butler-Lodge-Restaurant-1280x960.jpg',
+      src: process.env.PUBLIC_URL + '/mb_interior_lobby.png',
       title: 'Cozy Restaurant Interior',
       description: 'Warm, inviting dining atmosphere for family and friends'
     },
     {
-      src: process.env.PUBLIC_URL + '/Historic-Molly-Butler-Lodge-And-Restaurant-Greer-AZ.jpg',
+      src: process.env.PUBLIC_URL + '/mb_exterior_summer.png',
       title: 'Arizona\'s Oldest Guest Lodge',
       description: 'Over a century of hospitality in the White Mountains'
     },
     {
-      src: process.env.PUBLIC_URL + '/Molly-Butler-Lodge-Restaurant-1280x960.jpg',
+      src: process.env.PUBLIC_URL + '/mb_interior_dining.png',
       title: 'Mountain Dining Experience',
       description: 'Authentic cuisine in a historic setting'
     },
     {
-      src: process.env.PUBLIC_URL + '/Historic-Molly-Butler-Lodge-And-Restaurant-Greer-AZ.jpg',
+      src: process.env.PUBLIC_URL + '/mb_exterior_sign.png',
       title: 'Greer, Arizona Location',
       description: 'Nestled in the beautiful White Mountains'
     },
