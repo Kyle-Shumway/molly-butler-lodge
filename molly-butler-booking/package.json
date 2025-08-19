@@ -31,8 +31,7 @@
     "build": "react-scripts build",
     "build:prod": "cross-env REACT_APP_API_URL=https://molly-butler-lodge-production.up.railway.app/api react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "deploy": "npm run build:prod && gh-pages -d build"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
@@ -53,7 +52,6 @@
     ]
   },
   "devDependencies": {
-    "cross-env": "^10.0.0",
-    "gh-pages": "^6.3.0"
+    "cross-env": "^10.0.0"
   }
 }
