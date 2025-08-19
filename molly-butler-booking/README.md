@@ -1,6 +1,8 @@
-# Getting Started with Create React App
+# Molly Butler Lodge Booking System
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+Deployment: Secure GitHub Actions workflow handles automatic deployment to GitHub Pages.
 
 ## Available Scripts
 
