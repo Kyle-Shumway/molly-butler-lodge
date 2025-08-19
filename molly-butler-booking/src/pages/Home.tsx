@@ -21,7 +21,7 @@ const Home: React.FC = () => {
       description: 'Warm, inviting dining atmosphere for family and friends'
     },
     {
-      src: process.env.PUBLIC_URL + '/mb_exterior_summer.png',
+      src: process.env.PUBLIC_URL + '/mb_exterior_summer.jpg',
       title: 'Arizona\'s Oldest Guest Lodge',
       description: 'Over a century of hospitality in the White Mountains'
     },
@@ -31,7 +31,7 @@ const Home: React.FC = () => {
       description: 'Authentic cuisine in a historic setting'
     },
     {
-      src: process.env.PUBLIC_URL + '/mb_exterior_sign.png',
+      src: process.env.PUBLIC_URL + '/mb_exterior_sign.jpg',
       title: 'Greer, Arizona Location',
       description: 'Nestled in the beautiful White Mountains'
     },
