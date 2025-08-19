@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { authAPI, reservationsAPI } from '../services/api';
 import { User, DashboardStats, Reservation } from '../types';
 import './Admin.css';
@@ -24,27 +24,7 @@ const Admin: React.FC = () => {
   const [submitting, setSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  useEffect(() => {
-    // Check if user is already logged in
-    const token = localStorage.getItem('authToken');
-    if (token) {
-      checkAuthStatus();
-    }
-  }, []);
-
-  const checkAuthStatus = async () => {
-    try {
-      const response = await authAPI.getProfile();
-      setUser(response.data);
-      setIsLoggedIn(true);
-      fetchDashboardData();
-    } catch (error) {
-      localStorage.removeItem('authToken');
-      setIsLoggedIn(false);
-    }
-  };
-
-  const fetchDashboardData = async () => {
+  const fetchDashboardData = useCallback(async () => {
     try {
       const [statsResponse, reservationsResponse] = await Promise.all([
         reservationsAPI.getStats(),
@@ -60,7 +40,27 @@ const Admin: React.FC = () => {
         setError('Failed to load dashboard data');
       }
     }
-  };
+  }, []);
+
+  const checkAuthStatus = useCallback(async () => {
+    try {
+      const response = await authAPI.getProfile();
+      setUser(response.data);
+      setIsLoggedIn(true);
+      fetchDashboardData();
+    } catch (error) {
+      localStorage.removeItem('authToken');
+      setIsLoggedIn(false);
+    }
+  }, [fetchDashboardData]);
+
+  useEffect(() => {
+    // Check if user is already logged in
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      checkAuthStatus();
+    }
+  }, [checkAuthStatus]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
